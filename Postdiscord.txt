@@ -1,0 +1,18 @@
+  function postDiscord() {
+  const sheet    = SpreadsheetApp.openById('1zfW0cKn2jkRXgKoi64Bk5ys2b0a7CeNhfR_toILhKmM');
+  var month    = sheet.getSheetByName('シート名').getRange(2,2).getValue();
+  var ll       = sheet.getSheetByName('シート名').getRange(3,2).getValue();
+  var ids      = sheet.getSheetByName('シート名').getRange(ll,17).getValue();
+  const sentence = sheet.getSheetByName('シート名').getRange(24,5).getValue();
+  const payload  = {
+    'content'      : sentence,
+    'tts'       : false
+  };
+  var options = {
+    'method'      : 'POST'                 ,
+    'headers'     : { 'Content-type': "application/json" },
+    'payload'     : JSON.stringify(payload),
+  };
+  var url = 'ディスコードのWebhookURL';
+  UrlFetchApp.fetch(url, options);
+}

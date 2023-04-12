@@ -1,0 +1,95 @@
+var spreadSheetUrl = 'URL1';
+//毎朝実行し、イベントを登録する
+function setMyEventsForProducer2(){
+  // 予定を取得
+  // 公式
+  var cal = CalendarApp.getCalendarById('URL2');
+  var objSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  var objSheet = objSpreadsheet.getActiveSheet();
+  var objCell = objSheet.getActiveCell();
+  var pointX = objCell.getRow();//スプレッドシート上の記入開始列
+  var pointY = objCell.getColumn();//スプレッドシート上の記入開始列
+  //var date = new Date();
+  var date_default = new Date('2023/01/01');
+  var date_year = 365;
+  var date = date_default;
+//  var events = cal.getEventsForDay(date); 
+  
+  for(var i=0; i < date_year; i++){
+    pointX++;
+    date.setDate(date.getDate() + 1);
+//    events = cal.getEventsForDay(date); 
+//    setEventsToSpreadForProducer2(events, pointX, pointY, date, objSheet);
+  }
+
+  // 祝日
+  cal = CalendarApp.getCalendarById('URL3');
+  date = new Date('2023/01/01');
+  pointX = objCell.getRow();//スプレッドシート上の記入開始列
+  pointY = objCell.getColumn();//スプレッドシート上の記入開始列
+  
+  for(var i=0; i < date_year; i++){
+    pointX++;
+    date.setDate(date.getDate() + 1);
+    events = cal.getEventsForDay(date); 
+    setEventsToSpreadForPublicHoliDay2(events, pointX, pointY, date, objSheet);
+  }
+
+  // 非公式
+ // //cal = CalendarApp.getCalendarById('URL4');
+  cal = CalendarApp.getCalendarById('URL5');
+  date = new Date('2023/01/01');
+  pointX = objCell.getRow();//スプレッドシート上の記入開始列
+  pointY = objCell.getColumn();//スプレッドシート上の記入開始列
+  
+  for(var i=0; i < date_year; i++){
+    pointX++;
+    date.setDate(date.getDate() + 1);
+//    events = cal.getEventsForDay(date); 
+//    setEventsToSpreadForProducer2_2(events, pointX, pointY, date, objSheet);
+  }
+}
+
+// 祝日用日付イベ取得
+function setEventsToSpreadForPublicHoliDay2(events, pointX, pointY, date, sheet){
+  sheet.getRange(pointX, pointY).setValue(date);
+
+  // 曜日設定
+  var arr_day = new Array('日', '月', '火', '水', '木', '金', '土');
+  var day_num = date.getDay();
+  sheet.getRange(pointX, pointY + 1).setValue(arr_day[day_num]);
+
+  if( events.length > 0 ){
+    sheet.getRange(pointX, pointY + 1).setValue(arr_day[day_num] + "祝");
+    sheet.getRange(pointX, pointY + 2).setValue(events[0].getTitle());
+  }
+}
+
+// 公式イベ用取得
+function setEventsToSpreadForProducer2(events, pointX, pointY, date, sheet){
+  //sheet.getRange(pointX, pointY).setValue(date);
+
+  // 曜日設定
+  //var arr_day = new Array('日', '月', '火', '水', '木', '金', '土');
+  //var day_num = date.getDay();
+  //sheet.getRange(pointX, pointY + 1).setValue(arr_day[day_num]);
+ 
+  if( events.length > 0 ){
+    sheet.getRange(pointX, pointY + 3).setValue(events[0].getTitle());
+  }
+}
+  
+// 非公式イベ用取得
+function setEventsToSpreadForProducer2_2(events, pointX, pointY, date, sheet){
+  //sheet.getRange(pointX, pointY).setValue(date);
+
+  // 曜日設定
+  //var arr_day = new Array('日', '月', '火', '水', '木', '金', '土');
+  //var day_num = date.getDay();
+  //sheet.getRange(pointX, pointY + 1).setValue(arr_day[day_num]);
+ 
+  if( events.length > 0 ){
+    sheet.getRange(pointX, pointY + 3).setValue(events[0].getTitle());
+  }
+
+}
